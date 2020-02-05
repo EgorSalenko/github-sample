@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -51,12 +50,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             override fun onLoadMore(currentPage: Int) {
                 searchViewModel.onLoadMore(currentPage)
             }
-
         }
 
         searchResultList.adapter = fastAdapter
         searchResultList.layoutManager = LinearLayoutManager(context)
-        searchResultList.itemAnimator = DefaultItemAnimator()
+        searchResultList.itemAnimator = null
         searchResultList.addOnScrollListener(endlessScrollListener)
     }
 
@@ -123,5 +121,4 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         loadingView.visibility = View.GONE
         searchResultList.visibility = View.GONE
     }
-
 }

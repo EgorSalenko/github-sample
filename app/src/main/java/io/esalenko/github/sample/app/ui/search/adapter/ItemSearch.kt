@@ -17,6 +17,9 @@ class ItemSearch(private val entity: SearchItemEntity) :
 
     override fun getViewHolder(v: View) = SearchItemViewHolder(v)
 
+    init {
+        identifier = entity.id.toLong()
+    }
 
     class SearchItemViewHolder(view: View) : FastAdapter.ViewHolder<ItemSearch>(view) {
 
@@ -43,7 +46,7 @@ class ItemSearch(private val entity: SearchItemEntity) :
         }
 
         override fun unbindView(item: ItemSearch) {
-
+            // not applicable
         }
     }
 }
