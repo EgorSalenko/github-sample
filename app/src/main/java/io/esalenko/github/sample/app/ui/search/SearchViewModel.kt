@@ -22,6 +22,7 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     private val searchScope = CoroutineScope(Dispatchers.IO + searchJob)
 
     private var lastQuery: String = ""
+    private var lastPage = 1
 
     init {
         fetchMore()
@@ -34,11 +35,11 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
             searchScope.launch {
                 try {
                     repository.clearAll()
-                    repository.search(query, 1)
-                    val searItems = async {
+                    repository.search(query, lastPage)
+                    val searchItems = async {
                         repository.getAll()
                     }
-                    val list = searItems.await()
+                    val list = searchItems.await()
                     _searchLiveData.postValue(LiveDataResult.Success(list))
                 } catch (e: Exception) {
                     _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
@@ -51,7 +52,17 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     fun onLoadMore(nextPage: Int) {
         if (lastQuery.isNotEmpty()) {
             searchScope.launch {
-                repository.search(lastQuery, nextPage)
+                try {
+                    repository.search(lastQuery, lastPage + nextPage)
+                    val searchItems = async {
+                        repository.getAll()
+                    }
+                    val list = searchItems.await()
+                    _searchLiveData.postValue(LiveDataResult.Success(list))
+                } catch (e: Exception) {
+                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                    Timber.e(e)
+                }
             }
         }
     }

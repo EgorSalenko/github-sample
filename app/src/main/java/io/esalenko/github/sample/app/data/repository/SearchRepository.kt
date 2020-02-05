@@ -4,15 +4,9 @@ import io.esalenko.github.sample.app.data.db.dao.SearchDao
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.data.model.Items
 import io.esalenko.github.sample.app.data.network.SearchService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 
 
 class SearchRepository(private val service: SearchService, private val searchDao: SearchDao) {
-
-    private val networkJob = Job()
-    private val networkScope = CoroutineScope(Dispatchers.IO + networkJob)
 
     companion object {
         private const val PAGE_LIMIT = 30

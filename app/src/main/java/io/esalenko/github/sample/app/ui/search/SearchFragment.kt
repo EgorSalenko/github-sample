@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
@@ -23,7 +24,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     companion object {
         const val TAG = "SearchFragment"
-
         fun newInstance() = SearchFragment()
     }
 
@@ -47,14 +47,17 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private fun recyclerView() {
         itemAdapter = ItemAdapter.items()
         fastAdapter = FastAdapter.with(itemAdapter)
+        val endlessScrollListener = object : EndlessRecyclerOnScrollListener() {
+            override fun onLoadMore(currentPage: Int) {
+                searchViewModel.onLoadMore(currentPage)
+            }
+
+        }
+
         searchResultList.adapter = fastAdapter
         searchResultList.layoutManager = LinearLayoutManager(context)
-
-        searchResultList.addOnScrollListener(object : EndlessRecyclerOnScrollListener() {
-            override fun onLoadMore(currentPage: Int) {
-                searchViewModel.onLoadMore(currentPage + 1)
-            }
-        })
+        searchResultList.itemAnimator = DefaultItemAnimator()
+        searchResultList.addOnScrollListener(endlessScrollListener)
     }
 
     private fun listeners() {
@@ -69,30 +72,31 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     private fun subscribeUi() {
-        searchViewModel.searchLiveData.observe(viewLifecycleOwner, Observer(::bindItems))
+        searchViewModel.searchLiveData
+            .observe(viewLifecycleOwner, Observer(::processLiveDataResult))
     }
 
-    private fun bindItems(liveDataResult: LiveDataResult<List<SearchItemEntity>>) {
+    private fun processLiveDataResult(liveDataResult: LiveDataResult<List<SearchItemEntity>>) {
         when (liveDataResult) {
-            is Loading -> {
-                showProgressBar()
-            }
+            is Loading -> showProgressBar()
             is Success -> {
                 val itemsEntity: List<SearchItemEntity>? = liveDataResult.data
-                if (itemsEntity.isNullOrEmpty()) {
-                    showPlaceholder()
-                } else {
-                    showRecyclerView()
-                    val itemsSearch = ArrayList<ItemSearch>()
-                    itemsEntity.forEach { entity ->
-                        itemsSearch.add(ItemSearch(entity))
-                    }
-                    FastAdapterDiffUtil[itemAdapter] = itemsSearch
-                }
+                bindSearchItems(itemsEntity)
             }
-            is Error -> {
-                showErrorToast()
+            is Error -> showErrorToast()
+        }
+    }
+
+    private fun bindSearchItems(itemsEntity: List<SearchItemEntity>?) {
+        if (itemsEntity.isNullOrEmpty()) {
+            showPlaceholder()
+        } else {
+            showRecyclerView()
+            val itemsSearch = ArrayList<ItemSearch>()
+            itemsEntity.forEach { entity ->
+                itemsSearch.add(ItemSearch(entity))
             }
+            FastAdapterDiffUtil[itemAdapter] = itemsSearch
         }
     }
 
