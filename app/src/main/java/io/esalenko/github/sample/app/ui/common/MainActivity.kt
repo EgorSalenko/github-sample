@@ -14,6 +14,5 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
                 .add(R.id.fragment_container, SearchFragment.newInstance(), SearchFragment.TAG)
                 .commitAllowingStateLoss()
         }
-
     }
 }

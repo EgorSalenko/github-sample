@@ -21,5 +21,4 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes), Ba
     override fun onReady(savedInstanceState: Bundle?) {}
 
     override fun onInitView(savedInstanceState: Bundle?) {}
-
 }

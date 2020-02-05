@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.layout_item.view.*
 
 class ItemSearch(private val entity: SearchItemEntity) :
     AbstractItem<ItemSearch.SearchItemViewHolder>() {
+
     override val layoutRes: Int
         get() = R.layout.layout_item
     override val type: Int

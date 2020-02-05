@@ -27,5 +27,4 @@ abstract class BaseActivity(@LayoutRes layoutResId: Int) :
     override fun onInitView(savedInstanceState: Bundle?) {
 
     }
-
 }

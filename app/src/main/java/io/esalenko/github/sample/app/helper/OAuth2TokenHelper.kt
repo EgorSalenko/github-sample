@@ -11,5 +11,4 @@ class OAuth2TokenHelper(private val sharedPreferenceManager: SharedPreferenceMan
     fun persistAuthToken(authState: AuthState) {
         sharedPreferenceManager.writeAuthState(authState)
     }
-
 }

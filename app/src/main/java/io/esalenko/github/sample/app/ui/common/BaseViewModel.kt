@@ -29,5 +29,4 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
         super.onCleared()
         searchScope.coroutineContext.cancelChildren()
     }
-
 }
