@@ -22,6 +22,8 @@ class SplashActivity : BaseActivity(R.layout.activity_splash) {
 
     private fun subscribeUi() {
         splashViewModel.tokenLiveData.observe(this, Observer { event ->
+            // TODO :: check token validity
+            // https://developer.github.com/v3/apps/oauth_applications/
             when (event.getContentIfNotHandled()) {
                 is SplashViewModel.TokenResult.Valid -> openSearchScreen()
                 is SplashViewModel.TokenResult.Empty -> openLoginScreen()
