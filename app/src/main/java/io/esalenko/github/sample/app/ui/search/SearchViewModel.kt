@@ -1,92 +1,89 @@
 package io.esalenko.github.sample.app.ui.search
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.data.repository.SearchRepository
+import io.esalenko.github.sample.app.ui.common.BaseViewModel
 import io.esalenko.github.sample.app.ui.common.LiveDataResult
-import kotlinx.coroutines.*
-import timber.log.Timber
+import kotlinx.coroutines.async
 
 
 class SearchViewModel(app: Application, private val repository: SearchRepository) :
-    AndroidViewModel(app) {
+    BaseViewModel(app) {
 
     private val _searchLiveData = MutableLiveData<LiveDataResult<List<SearchItemEntity>>>()
     val searchLiveData: LiveData<LiveDataResult<List<SearchItemEntity>>>
         get() = _searchLiveData
 
-    private val searchJob = Job()
-    private val searchScope = CoroutineScope(Dispatchers.IO + searchJob)
-
     private var lastQuery: String = ""
     private var lastPage = 1
 
     init {
-        fetchMore()
+        getCachedData()
     }
 
     fun search(query: String) {
-        if (!isQueySame(query)) {
+        if (!isQuerySame(query)) {
             _searchLiveData.postValue(LiveDataResult.Loading())
             lastQuery = query
-            searchScope.launch {
-                try {
-                    repository.clearAll()
-                    repository.search(query, lastPage)
-                    val searchItems = async {
-                        repository.getAll()
-                    }
-                    val list = searchItems.await()
-                    _searchLiveData.postValue(LiveDataResult.Success(list))
-                } catch (e: Exception) {
+            clearCache()
+            getSearchedList(lastPage, { searchItems ->
+                _searchLiveData.postValue(LiveDataResult.Success(searchItems))
+            }, {
                     _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
-                    Timber.e(e)
-                }
-            }
+            })
         }
     }
 
     fun onLoadMore(nextPage: Int) {
         if (lastQuery.isNotEmpty()) {
-            searchScope.launch {
-                try {
-                    repository.search(lastQuery, lastPage + nextPage)
-                    val searchItems = async {
-                        repository.getAll()
-                    }
-                    val list = searchItems.await()
-                    _searchLiveData.postValue(LiveDataResult.Success(list))
-                } catch (e: Exception) {
-                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
-                    Timber.e(e)
-                }
-            }
+            getSearchedList(lastPage + nextPage, { searchItems ->
+                _searchLiveData.postValue(LiveDataResult.Success(searchItems))
+            }, {
+                _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+            })
         }
     }
 
-    private fun fetchMore() {
-        searchScope.launch {
-            try {
+    private fun getSearchedList(
+        page: Int,
+        onExecute: suspend (List<SearchItemEntity>) -> Unit,
+        onError: suspend (Exception) -> Unit
+    ) {
+        safeExecute(
+            {
+                repository.search(lastQuery, lastPage + page)
                 val searchItems = async {
                     repository.getAll()
                 }
-                _searchLiveData.postValue(LiveDataResult.Success(searchItems.await()))
-            } catch (e: Exception) {
-                Timber.e(e)
-                _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                onExecute.invoke(searchItems.await())
+            },
+            { error ->
+                onError.invoke(error)
+            })
+
+    }
+
+    private fun clearCache() {
+        safeExecute({
+            repository.clearAll()
+        })
+    }
+
+    private fun getCachedData() {
+        safeExecute({
+            val searchItems = async {
+                repository.getAll()
             }
-        }
+            _searchLiveData.postValue(LiveDataResult.Success(searchItems.await()))
+        }, {
+            _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+        })
     }
 
-    private fun isQueySame(query: String): Boolean {
+    private fun isQuerySame(query: String): Boolean {
         return query == lastQuery
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        searchScope.coroutineContext.cancelChildren()
     }
 }
