@@ -19,6 +19,7 @@ class SplashViewModel(app: Application, private val tokenHelper: OAuth2TokenHelp
     val tokenLiveData: LiveData<Event<TokenResult>>
         get() = _tokenLiveData
 
+    // TODO :: Check if user logged in
     fun validateToken() {
         val tokenResult = GlobalScope.async {
             return@async if (tokenHelper.hasToken) {
