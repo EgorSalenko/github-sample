@@ -11,4 +11,5 @@
   <string name="no_items_found">No items found</string>
   <string name="error_toast">Network error</string>
     <string name="loading_more_data">Loading more data for you...</string>
+  <string name="powered_by_egor_salenko">Powered by Egor Salenko</string>
 </resources>
