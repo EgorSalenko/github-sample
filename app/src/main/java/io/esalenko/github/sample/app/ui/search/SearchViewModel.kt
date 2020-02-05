@@ -21,11 +21,11 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     private var lastPage = 1
 
     init {
-        getCachedData()
+        fetchCachedData()
     }
 
     fun search(query: String) {
-        if (!isQuerySame(query)) {
+        if (!isQuerySame(query)) { // optimization for spam avoiding
             _searchLiveData.postValue(LiveDataResult.Loading())
             lastQuery = query
             clearCache()
@@ -67,12 +67,10 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     }
 
     private fun clearCache() {
-        safeExecute({
-            repository.clearAll()
-        })
+        safeExecute({ repository.clearAll() })
     }
 
-    private fun getCachedData() {
+    private fun fetchCachedData() {
         safeExecute({
             val searchItems = async {
                 repository.getAll()

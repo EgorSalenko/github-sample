@@ -51,11 +51,12 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 searchViewModel.onLoadMore(currentPage)
             }
         }
-
-        searchResultList.adapter = fastAdapter
-        searchResultList.layoutManager = LinearLayoutManager(context)
-        searchResultList.itemAnimator = null
-        searchResultList.addOnScrollListener(endlessScrollListener)
+        searchResultList.apply {
+            adapter = fastAdapter
+            layoutManager = LinearLayoutManager(context)
+            itemAnimator = null
+            addOnScrollListener(endlessScrollListener)
+        }
     }
 
     private fun listeners() {
@@ -70,7 +71,8 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     private fun subscribeUi() {
-        searchViewModel.searchLiveData
+        searchViewModel
+            .searchLiveData
             .observe(viewLifecycleOwner, Observer(::processLiveDataResult))
     }
 
