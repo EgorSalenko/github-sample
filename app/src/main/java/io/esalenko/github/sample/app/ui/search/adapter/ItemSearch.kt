@@ -8,7 +8,7 @@ import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import kotlinx.android.synthetic.main.item_github_repository.view.*
 
 
-class ItemSearch(private val entity: SearchItemEntity) :
+class ItemSearch(val entity: SearchItemEntity) :
     AbstractItem<ItemSearch.SearchItemViewHolder>() {
 
     override val layoutRes: Int

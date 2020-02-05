@@ -52,6 +52,17 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
         }
     }
 
+    fun deleteItem(id: Int) {
+        delete(id)
+        fetchCachedData()
+    }
+
+    private fun delete(id: Int) {
+        safeExecute({
+            repository.delete(id)
+        })
+    }
+
     private fun getSearchedList(
         page: Int,
         onExecute: suspend (List<SearchItemEntity>) -> Unit,

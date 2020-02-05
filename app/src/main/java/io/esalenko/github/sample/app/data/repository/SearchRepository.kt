@@ -46,6 +46,10 @@ class SearchRepository(private val service: SearchService, private val searchDao
         )
     }
 
+    suspend fun delete(id: Int) {
+        searchDao.delete(id)
+    }
+
     suspend fun clearAll() {
         searchDao.clearAll()
     }
