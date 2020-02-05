@@ -3,12 +3,16 @@ package io.esalenko.github.sample.app.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import io.esalenko.github.sample.app.BuildConfig
+import androidx.lifecycle.Observer
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.helper.OAuth2AuthorizationHelper
 import io.esalenko.github.sample.app.ui.common.BaseActivity
+import io.esalenko.github.sample.app.ui.common.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import net.openid.appauth.*
+import net.openid.appauth.AuthState
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationResponse
+import net.openid.appauth.AuthorizationService
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -32,7 +36,15 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        subscribeUi()
         onClickListeners()
+    }
+
+    private fun subscribeUi() {
+        loginViewModel.screenStateLiveData.observe(this, Observer { event ->
+            val isSuccess = event.getContentIfNotHandled() ?: false
+            if (isSuccess) openMainScreen()
+        })
     }
 
     private fun onClickListeners() {
@@ -79,10 +91,10 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
         error?.printStackTrace()
 
         val authState = AuthState(response, error)
-        val clientAuth = ClientSecretBasic(BuildConfig.CLIENT_SECRET)
-        AuthorizationService(this).performTokenRequest(
-            response.createTokenExchangeRequest(),
-            clientAuth
+        AuthorizationService(this, authHelper.onCreatedAppAuthConfig())
+            .performTokenRequest(
+                response.createTokenExchangeRequest(),
+                authHelper.onCreatedClientSecretBasic()
         )
         { tokenResponse, exception ->
             exception?.let { e ->
@@ -102,6 +114,10 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
                 )
             }
         }
+    }
+
+    private fun openMainScreen() {
+        startActivity(Intent(this, MainActivity::class.java))
     }
 
     private fun persistAuthState(authState: AuthState) {

@@ -3,9 +3,8 @@ package io.esalenko.github.sample.app.helper
 import android.net.Uri
 import io.esalenko.github.sample.app.BuildConfig
 import io.esalenko.github.sample.app.data.Constants
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
+import net.openid.appauth.*
+import net.openid.appauth.browser.*
 
 
 class OAuth2AuthorizationHelper {
@@ -27,4 +26,26 @@ class OAuth2AuthorizationHelper {
             .setScopes("repo")
             .build()
     }
+
+    fun onCreatedClientSecretBasic() = ClientSecretBasic(BuildConfig.CLIENT_SECRET)
+
+    fun onCreatedAppAuthConfig() = AppAuthConfiguration.Builder()
+        .setBrowserMatcher(
+            BrowserWhitelist(
+                VersionedBrowserMatcher.CHROME_CUSTOM_TAB,
+                VersionedBrowserMatcher.SAMSUNG_CUSTOM_TAB
+            )
+        )
+        // prevent the use of a buggy version of the custom tabs in Samsung SBrowser:
+        .setBrowserMatcher(
+            BrowserBlacklist(
+                VersionedBrowserMatcher(
+                    Browsers.SBrowser.PACKAGE_NAME,
+                    Browsers.SBrowser.SIGNATURE_SET,
+                    true, // when this browser is used via a custom tab
+                    VersionRange.atMost("5.3")
+                )
+            )
+        )
+        .build()
 }

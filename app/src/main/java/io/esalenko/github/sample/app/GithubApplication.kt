@@ -4,6 +4,7 @@ import android.app.Application
 import io.esalenko.github.sample.app.di.authModule
 import io.esalenko.github.sample.app.di.networkModule
 import io.esalenko.github.sample.app.di.persistenceModule
+import io.esalenko.github.sample.app.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -24,6 +25,7 @@ class GithubApplication : Application() {
                 listOf(
                     authModule,
                     networkModule,
+                    viewModelModule,
                     persistenceModule
                 )
             )

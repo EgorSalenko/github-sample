@@ -2,16 +2,24 @@ package io.esalenko.github.sample.app.ui.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import io.esalenko.github.sample.app.data.persistence.SharedPreferenceManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import io.esalenko.github.sample.app.helper.OAuth2TokenHelper
+import io.esalenko.github.sample.app.ui.common.Event
 import net.openid.appauth.AuthState
 
 
 class LoginViewModel(
     app: Application,
-    private val sharedPreferenceManager: SharedPreferenceManager
+    private val tokenHelper: OAuth2TokenHelper
 ) : AndroidViewModel(app) {
 
+    private val _screenStateLiveData = MutableLiveData<Event<Boolean>>()
+    val screenStateLiveData: LiveData<Event<Boolean>>
+        get() = _screenStateLiveData
+
     fun persistAuthState(authState: AuthState) {
-        sharedPreferenceManager.writeAuthState(authState)
+        tokenHelper.persistAuthToken(authState)
+        _screenStateLiveData.postValue(Event(true))
     }
 }
