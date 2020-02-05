@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
+import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.ui.common.BaseFragment
@@ -48,6 +49,12 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         fastAdapter = FastAdapter.with(itemAdapter)
         searchResultList.adapter = fastAdapter
         searchResultList.layoutManager = LinearLayoutManager(context)
+
+        searchResultList.addOnScrollListener(object : EndlessRecyclerOnScrollListener() {
+            override fun onLoadMore(currentPage: Int) {
+                searchViewModel.onLoadMore(currentPage + 1)
+            }
+        })
     }
 
     private fun listeners() {
@@ -97,16 +104,19 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private fun showProgressBar() {
         searchResultList.visibility = View.GONE
+        itemsPlaceholder.visibility = View.GONE
         loadingView.visibility = View.VISIBLE
     }
 
     private fun showErrorToast() {
         loadingView.visibility = View.GONE
+        itemsPlaceholder.visibility = View.VISIBLE
         Toast.makeText(context, R.string.error_toast, Toast.LENGTH_LONG).show()
     }
 
     private fun showPlaceholder() {
         itemsPlaceholder.visibility = View.VISIBLE
+        loadingView.visibility = View.GONE
         searchResultList.visibility = View.GONE
     }
 

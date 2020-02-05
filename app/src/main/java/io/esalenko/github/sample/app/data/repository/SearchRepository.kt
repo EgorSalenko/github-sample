@@ -4,7 +4,9 @@ import io.esalenko.github.sample.app.data.db.dao.SearchDao
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.data.model.Items
 import io.esalenko.github.sample.app.data.network.SearchService
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 
 
 class SearchRepository(private val service: SearchService, private val searchDao: SearchDao) {
@@ -16,18 +18,20 @@ class SearchRepository(private val service: SearchService, private val searchDao
         private const val PAGE_LIMIT = 30
     }
 
-    fun search(query: String, sort: String, order: String) {
-        networkScope.launch {
-            val response = async {
-                service.search(query, sort, order, PAGE_LIMIT).items
-            }
-            searchDao.insertList(response.await().toSearchItemEntityList())
+    suspend fun search(query: String, page: Int) {
+        val items = service.search(
+            query,
+            sort = "stars",
+            order = "desc",
+            limit = PAGE_LIMIT,
+            page = page
+        ).items
+        if (items.isNotEmpty()) {
+            searchDao.insertList(items.toSearchItemEntityList())
         }
     }
 
-    suspend fun getAll(): List<SearchItemEntity> {
-        return searchDao.getAll()
-    }
+    suspend fun getAll(): List<SearchItemEntity> = searchDao.getAll()
 
     private fun List<Items>.toSearchItemEntityList(): List<SearchItemEntity> {
         val entities = mutableListOf<SearchItemEntity>()
@@ -46,5 +50,9 @@ class SearchRepository(private val service: SearchService, private val searchDao
             this.stargazers_count,
             this.language
         )
+    }
+
+    suspend fun clearAll() {
+        searchDao.clearAll()
     }
 }

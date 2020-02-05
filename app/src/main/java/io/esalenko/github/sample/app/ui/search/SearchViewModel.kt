@@ -7,10 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.data.repository.SearchRepository
 import io.esalenko.github.sample.app.ui.common.LiveDataResult
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import timber.log.Timber
 
 
 class SearchViewModel(app: Application, private val repository: SearchRepository) :
@@ -20,30 +18,64 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     val searchLiveData: LiveData<LiveDataResult<List<SearchItemEntity>>>
         get() = _searchLiveData
 
-    private val fetchDbJob = Job()
-    private val fetchDbScope = CoroutineScope(Dispatchers.IO + fetchDbJob)
+    private val searchJob = Job()
+    private val searchScope = CoroutineScope(Dispatchers.IO + searchJob)
+
+    private var lastQuery: String = ""
 
     init {
         fetchMore()
     }
 
     fun search(query: String) {
-        _searchLiveData.postValue(LiveDataResult.Loading())
-        repository.search(
-            query,
-            sort = "stars",
-            order = "desc"
-        )
-        fetchMore()
+        if (!isQueySame(query)) {
+            _searchLiveData.postValue(LiveDataResult.Loading())
+            lastQuery = query
+            searchScope.launch {
+                try {
+                    repository.clearAll()
+                    repository.search(query, 1)
+                    val searItems = async {
+                        repository.getAll()
+                    }
+                    val list = searItems.await()
+                    _searchLiveData.postValue(LiveDataResult.Success(list))
+                } catch (e: Exception) {
+                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                    Timber.e(e)
+                }
+            }
+        }
+    }
+
+    fun onLoadMore(nextPage: Int) {
+        if (lastQuery.isNotEmpty()) {
+            searchScope.launch {
+                repository.search(lastQuery, nextPage)
+            }
+        }
     }
 
     private fun fetchMore() {
-        fetchDbScope.launch {
+        searchScope.launch {
             try {
-                _searchLiveData.postValue(LiveDataResult.Success(repository.getAll()))
+                val searchItems = async {
+                    repository.getAll()
+                }
+                _searchLiveData.postValue(LiveDataResult.Success(searchItems.await()))
             } catch (e: Exception) {
+                Timber.e(e)
                 _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
             }
         }
+    }
+
+    private fun isQueySame(query: String): Boolean {
+        return query == lastQuery
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchScope.coroutineContext.cancelChildren()
     }
 }

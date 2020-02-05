@@ -28,9 +28,17 @@ class ItemSearch(private val entity: SearchItemEntity) :
         override fun bindView(item: ItemSearch, payloads: MutableList<Any>) {
             with(item.entity) {
                 fullNameTextView.text = full_name
-                descriptionTextView.text = description
                 starsTextView.text = stargazers_count.toString()
-                languageTextView.text = language
+                if (description == null) {
+                    descriptionTextView.visibility = View.GONE
+                } else {
+                    descriptionTextView.text = description
+                }
+                if (language == null) {
+                    languageTextView.visibility = View.GONE
+                } else {
+                    languageTextView.text = language
+                }
             }
         }
 

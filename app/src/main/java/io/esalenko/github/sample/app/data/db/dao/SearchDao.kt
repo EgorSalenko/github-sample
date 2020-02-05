@@ -17,4 +17,7 @@ interface SearchDao {
 
     @Delete
     suspend fun delete(searchItemEntity: SearchItemEntity)
+
+    @Query("DELETE FROM search_items")
+    suspend fun clearAll()
 }
