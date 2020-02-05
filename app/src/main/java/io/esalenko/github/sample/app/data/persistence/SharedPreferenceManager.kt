@@ -19,7 +19,7 @@ class SharedPreferenceManager(ctx: Context) {
         return if (stateJson != null) {
             AuthState.jsonDeserialize(stateJson)
         } else {
-            AuthState()
+            null
         }
     }
 
