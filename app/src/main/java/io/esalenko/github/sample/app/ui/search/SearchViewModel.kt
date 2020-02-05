@@ -18,32 +18,37 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
         get() = _searchLiveData
 
     private var lastQuery: String = ""
-    private var lastPage = 1
+
+    companion object {
+        private const val FIRST_PAGE = 1
+    }
 
     init {
         fetchCachedData()
     }
 
     fun search(query: String) {
-        if (!isQuerySame(query)) { // optimization for spam avoiding
+        if (!isQuerySame(query)) { // optimization for avoiding spam
             _searchLiveData.postValue(LiveDataResult.Loading())
             lastQuery = query
             clearCache()
-            getSearchedList(lastPage, { searchItems ->
+            getSearchedList(FIRST_PAGE, { searchItems ->
                 _searchLiveData.postValue(LiveDataResult.Success(searchItems))
             }, {
-                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
             })
         }
     }
 
     fun onLoadMore(nextPage: Int) {
         if (lastQuery.isNotEmpty()) {
-            getSearchedList(lastPage + nextPage, { searchItems ->
+            getSearchedList(nextPage, { searchItems ->
                 _searchLiveData.postValue(LiveDataResult.Success(searchItems))
             }, {
                 _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
             })
+        } else {
+            _searchLiveData.postValue(LiveDataResult.Cache())
         }
     }
 
@@ -54,7 +59,7 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     ) {
         safeExecute(
             {
-                repository.search(lastQuery, lastPage + page)
+                repository.search(lastQuery, page)
                 val searchItems = async {
                     repository.getAll()
                 }

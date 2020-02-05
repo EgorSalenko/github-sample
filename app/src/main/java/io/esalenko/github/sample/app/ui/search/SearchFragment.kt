@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.GenericItemAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
@@ -15,6 +16,7 @@ import io.esalenko.github.sample.app.ui.common.BaseFragment
 import io.esalenko.github.sample.app.ui.common.LiveDataResult
 import io.esalenko.github.sample.app.ui.common.LiveDataResult.*
 import io.esalenko.github.sample.app.ui.search.adapter.ItemSearch
+import io.esalenko.github.sample.app.ui.search.adapter.ProgressItem
 import kotlinx.android.synthetic.main.fragment_search.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -29,7 +31,8 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private val searchViewModel by viewModel<SearchViewModel>()
 
     private lateinit var fastAdapter: FastAdapter<ItemSearch>
-    private lateinit var itemAdapter: ItemAdapter<ItemSearch>
+    private lateinit var itemAdapter: GenericItemAdapter
+    private lateinit var footerAdapter: GenericItemAdapter
 
     override fun onReady(savedInstanceState: Bundle?) {
         super.onReady(savedInstanceState)
@@ -45,10 +48,15 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private fun recyclerView() {
         itemAdapter = ItemAdapter.items()
-        fastAdapter = FastAdapter.with(itemAdapter)
-        val endlessScrollListener = object : EndlessRecyclerOnScrollListener() {
+        footerAdapter = ItemAdapter.items()
+        fastAdapter = FastAdapter.with(listOf(itemAdapter, footerAdapter))
+        val endlessScrollListener = object : EndlessRecyclerOnScrollListener(footerAdapter) {
             override fun onLoadMore(currentPage: Int) {
-                searchViewModel.onLoadMore(currentPage)
+                footerAdapter.clear()
+                val progressItem = ProgressItem()
+                progressItem.isEnabled = false
+                footerAdapter.add(progressItem)
+                searchViewModel.onLoadMore(nextPage = currentPage + 1)
             }
         }
         searchResultList.apply {
@@ -84,10 +92,14 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 bindSearchItems(itemsEntity)
             }
             is Error -> showErrorToast()
+            is Cache -> {
+                footerAdapter.clear()
+            }
         }
     }
 
     private fun bindSearchItems(itemsEntity: List<SearchItemEntity>?) {
+        footerAdapter.clear()
         if (itemsEntity.isNullOrEmpty()) {
             showPlaceholder()
         } else {
@@ -114,7 +126,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private fun showErrorToast() {
         loadingView.visibility = View.GONE
-        itemsPlaceholder.visibility = View.VISIBLE
         Toast.makeText(context, R.string.error_toast, Toast.LENGTH_LONG).show()
     }
 

@@ -5,14 +5,14 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
-import kotlinx.android.synthetic.main.layout_item.view.*
+import kotlinx.android.synthetic.main.item_github_repository.view.*
 
 
 class ItemSearch(private val entity: SearchItemEntity) :
     AbstractItem<ItemSearch.SearchItemViewHolder>() {
 
     override val layoutRes: Int
-        get() = R.layout.layout_item
+        get() = R.layout.item_github_repository
     override val type: Int
         get() = R.id.fastadapter_search_item
 
