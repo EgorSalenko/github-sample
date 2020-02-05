@@ -2,7 +2,6 @@ package io.esalenko.github.sample.app.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.helper.OAuth2AuthorizationHelper
@@ -15,6 +14,7 @@ import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
 class LoginActivity : BaseActivity(R.layout.activity_login) {
@@ -28,15 +28,18 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
     private val loginViewModel by viewModel<LoginViewModel>()
     private val authHelper by inject<OAuth2AuthorizationHelper>()
 
-
     override fun onStart() {
         super.onStart()
         checkIntent(intent)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onReady(savedInstanceState: Bundle?) {
+        super.onReady(savedInstanceState)
         subscribeUi()
+    }
+
+    override fun onInitView(savedInstanceState: Bundle?) {
+        super.onInitView(savedInstanceState)
         onClickListeners()
     }
 
@@ -98,14 +101,13 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
         )
         { tokenResponse, exception ->
             exception?.let { e ->
-                Log.w(TAG, "Token Exchange failed", e)
+                Timber.w("Token Exchange failed $e")
                 return@performTokenRequest
             }
             tokenResponse?.let { response ->
                 authState.update(response, exception)
                 persistAuthState(authState)
-                Log.i(
-                    TAG,
+                Timber.i(
                     String.format(
                         "Token Response [ Access Token: %s, ID Token: %s ]",
                         response.accessToken,

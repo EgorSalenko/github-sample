@@ -1,9 +1,10 @@
 package io.esalenko.github.sample.app.di
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import io.esalenko.github.sample.app.data.Constants
+import com.google.gson.Gson
+import io.esalenko.github.sample.app.data.Constants.BASE_URL
+import io.esalenko.github.sample.app.data.network.SearchService
 import okhttp3.OkHttpClient
-import org.koin.core.qualifier.named
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,15 +12,31 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
 
-    fun provideHttpClient() = OkHttpClient.Builder().build()
+    fun provideHttpLoggingInterceptor() =
+        HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    fun provideRetrofit(client: OkHttpClient, baseUrl: String) = Retrofit.Builder()
-        .client(client)
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(CoroutineCallAdapterFactory.invoke())
+    fun provideHttpClient(loggingInterceptor: HttpLoggingInterceptor) = OkHttpClient
+        .Builder()
+        .addInterceptor(loggingInterceptor)
         .build()
 
-    single { provideHttpClient() }
+    fun provideGson() = Gson()
 
+    fun provideRetrofit(client: OkHttpClient, gson: Gson, baseUrl: String) = Retrofit.Builder()
+        .client(client)
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
+    single { provideHttpLoggingInterceptor() }
+    single { provideHttpClient(get()) }
+    single { provideGson() }
+
+    single<SearchService> {
+        provideRetrofit(
+            get(),
+            get(),
+            baseUrl = BASE_URL
+        ).create(SearchService::class.java)
+    }
 }

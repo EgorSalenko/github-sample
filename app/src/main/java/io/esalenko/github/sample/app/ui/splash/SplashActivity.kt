@@ -14,8 +14,8 @@ class SplashActivity : BaseActivity(R.layout.activity_splash) {
 
     private val splashViewModel by viewModel<SplashViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onReady(savedInstanceState: Bundle?) {
+        super.onReady(savedInstanceState)
         subscribeUi()
         splashViewModel.validateToken()
     }

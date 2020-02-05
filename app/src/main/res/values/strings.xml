@@ -7,4 +7,8 @@
   <string name="login_failed">"Login failed"</string>
   <string name="content_description_logo">Logo</string>
   <string name="github_sample_application">Github Sample Application</string>
+  <string name="hint_search_repository">Search repository</string>
+  <string name="no_items_found">No items found</string>
+  <string name="error_toast">Network error</string>
+
 </resources>
