@@ -5,6 +5,7 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
+import io.esalenko.github.sample.app.helper.withSpellingSuffix
 import kotlinx.android.synthetic.main.item_github_repository.view.*
 
 
@@ -33,7 +34,7 @@ class ItemSearch(val entity: SearchItemEntity) :
             with(item.entity) {
                 fullNameTextView.text = full_name
                 // TODO :: Impl stars count with K
-                starsTextView.text = stargazers_count.toString()
+                starsTextView.text = stargazers_count.withSpellingSuffix()
                 if (description == null) {
                     descriptionTextView.visibility = View.GONE
                 } else {
