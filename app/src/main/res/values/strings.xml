@@ -12,4 +12,5 @@
   <string name="error_toast">Network error</string>
     <string name="loading_more_data">Loading more data for you...</string>
   <string name="powered_by_egor_salenko">Powered by Egor Salenko</string>
+  <string name="search">Search</string>
 </resources>

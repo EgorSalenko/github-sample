@@ -125,7 +125,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                             itemStars {
                                 connect(
                                     BOTTOM to BOTTOM of PARENT_ID,
-                                    START to END of R.id.item_language,
+                                    END to END of PARENT_ID,
                                     TOP to BOTTOM of R.id.item_description
                                 )
                             }
@@ -138,7 +138,9 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                                 )
                             }
                         }
-                    }.lparams(matchParent, matchParent)
+                    }.lparams(matchParent, matchParent) {
+                        margin = dip(8)
+                    }
                 }
             }
         }

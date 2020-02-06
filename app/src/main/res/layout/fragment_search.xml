@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputTextLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/inputTextLayout"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="@dimen/margin_medium"
+        app:layout_constraintStart_toStartOf="parent"
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toStartOf="@id/searchBtn"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -30,44 +30,45 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/searchBtn"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_medium"
-        android:text="Search"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/inputTextLayout"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/search"
+        app:layout_constraintBottom_toBottomOf="@id/inputTextLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/inputTextLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchResultList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputTextLayout" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/itemsPlaceholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/no_items_found"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/inputTextLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputTextLayout"
         tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/loadingView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputTextLayout"
         tools:visibility="visible" />
 
