@@ -12,6 +12,7 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
+import com.mikepenz.itemanimators.SlideLeftAlphaAnimator
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.ui.common.BaseFragment
@@ -62,11 +63,10 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 searchViewModel.onLoadMore(nextPage = currentPage + 1)
             }
         }
-        // TODO :: Add item animators
         searchResultList.apply {
             adapter = fastAdapter
             layoutManager = LinearLayoutManager(context)
-            itemAnimator = null
+            itemAnimator = SlideLeftAlphaAnimator()
             addOnScrollListener(endlessScrollListener)
         }
         fastAdapter.addEventHook(object : ClickEventHook<ItemSearch>() {
