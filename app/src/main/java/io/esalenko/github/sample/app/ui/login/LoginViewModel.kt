@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.esalenko.github.sample.app.helper.OAuth2TokenHelper
+import io.esalenko.github.sample.app.data.auth.OAuth2TokenHelper
 import io.esalenko.github.sample.app.ui.common.Event
 import net.openid.appauth.AuthState
 

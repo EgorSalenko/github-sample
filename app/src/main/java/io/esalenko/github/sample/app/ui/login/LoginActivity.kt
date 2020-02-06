@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import io.esalenko.github.sample.app.R
-import io.esalenko.github.sample.app.helper.OAuth2AuthorizationHelper
+import io.esalenko.github.sample.app.data.auth.OAuth2AuthorizationHelper
 import io.esalenko.github.sample.app.ui.common.BaseActivity
 import io.esalenko.github.sample.app.ui.common.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*

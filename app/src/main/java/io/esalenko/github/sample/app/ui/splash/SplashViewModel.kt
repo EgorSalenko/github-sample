@@ -3,7 +3,7 @@ package io.esalenko.github.sample.app.ui.splash
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.esalenko.github.sample.app.helper.OAuth2TokenHelper
+import io.esalenko.github.sample.app.data.auth.OAuth2TokenHelper
 import io.esalenko.github.sample.app.ui.common.BaseViewModel
 import io.esalenko.github.sample.app.ui.common.Event
 import kotlinx.coroutines.async
