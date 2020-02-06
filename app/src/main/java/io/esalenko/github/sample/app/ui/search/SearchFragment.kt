@@ -21,7 +21,6 @@ import io.esalenko.github.sample.app.ui.common.LiveDataResult.*
 import io.esalenko.github.sample.app.ui.search.adapter.ItemSearch
 import io.esalenko.github.sample.app.ui.search.adapter.ProgressItem
 import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.item_github_repository.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -78,14 +77,14 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 item: ItemSearch
             ) {
                 when (v.id) {
-                    v.deleteItem.id -> searchViewModel.deleteItem(item.entity.id)
-                    v.item_card_view.id -> openItemInBrowser(item.entity.html_url)
+                    R.id.item_delete_icon -> searchViewModel.deleteItem(item.entity.id)
+                    R.id.item_card -> openItemInBrowser(item.entity.html_url)
                 }
             }
 
             override fun onBindMany(viewHolder: RecyclerView.ViewHolder): List<View>? {
                 return if (viewHolder is ItemSearch.SearchItemViewHolder) {
-                    listOf(viewHolder.itemView.deleteItem, viewHolder.itemView.item_card_view)
+                    listOf(viewHolder.deleteIcon, viewHolder.card)
                 } else {
                     emptyList()
                 }

@@ -2,4 +2,12 @@
 <resources>
     <item name="fastadapter_search_item" type="id" />
     <item name="fastadapter_footer_item" type="id" />
+
+    <!--ItemSearchUi-->
+    <item name="item_full_name" type="id" />
+    <item name="item_description" type="id" />
+    <item name="item_language" type="id" />
+    <item name="item_stars" type="id" />
+    <item name="item_delete_icon" type="id" />
+    <item name="item_card" type="id" />
 </resources>
