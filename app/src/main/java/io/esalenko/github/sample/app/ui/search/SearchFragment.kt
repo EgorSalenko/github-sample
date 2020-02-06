@@ -130,7 +130,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             }
             is Cache -> {
                 footerAdapter.clear()
-                resetEndlessScrollPageCount()
             }
         }
     }
