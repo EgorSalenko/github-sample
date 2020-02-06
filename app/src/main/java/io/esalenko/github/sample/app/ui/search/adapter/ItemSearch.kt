@@ -25,15 +25,13 @@ class ItemSearch(val entity: SearchItemEntity) :
 
     override val layoutRes: Int
         get() = 0
-
-    // get() = R.layout.item_github_repository
     override val type: Int
         get() = R.id.fastadapter_search_item
 
     override fun getViewHolder(v: View) = SearchItemViewHolder(v)
 
     init {
-        identifier = entity.id.toLong()
+        identifier = entity.stargazers_count.toLong()
     }
 
     class SearchItemViewHolder(view: View) : FastAdapter.ViewHolder<ItemSearch>(view) {
