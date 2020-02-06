@@ -12,7 +12,7 @@ interface SearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(items: List<SearchItemEntity>)
 
-    @Query("SELECT * FROM search_items")
+    @Query("SELECT * FROM search_items ORDER BY stargazers_count DESC")
     suspend fun getAll(): List<SearchItemEntity>
 
     @Delete
