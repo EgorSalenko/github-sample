@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">GitHubSampleApp</string>
+  <string name="app_name">GitHub Sample App</string>
   <!-- Strings related to login -->
   <string name="action_sign_in">Sign in with GitHub</string>
   <string name="welcome">"Welcome !"</string>
