@@ -8,13 +8,11 @@ import io.esalenko.github.sample.app.helper.OAuth2AuthorizationHelper
 import io.esalenko.github.sample.app.ui.common.BaseActivity
 import io.esalenko.github.sample.app.ui.common.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 
 class LoginActivity : BaseActivity(R.layout.activity_login) {
@@ -90,39 +88,12 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
 
         val response = AuthorizationResponse.fromIntent(intent) ?: return
         val error = AuthorizationException.fromIntent(intent)
-
-        error?.printStackTrace()
-
-        val authState = AuthState(response, error)
-        AuthorizationService(this, authHelper.onCreatedAppAuthConfig())
-            .performTokenRequest(
-                response.createTokenExchangeRequest(),
-                authHelper.onCreatedClientSecretBasic()
-        )
-        { tokenResponse, exception ->
-            exception?.let { e ->
-                Timber.w("Token Exchange failed $e")
-                return@performTokenRequest
-            }
-            tokenResponse?.let { response ->
-                authState.update(response, exception)
-                persistAuthState(authState)
-                Timber.i(
-                    String.format(
-                        "Token Response [ Access Token: %s, ID Token: %s ]",
-                        response.accessToken,
-                        response.idToken
-                    )
-                )
-            }
+        authHelper.handleAuthorizationResponse(response, error) { authState ->
+            loginViewModel.persistAuthState(authState)
         }
     }
 
     private fun openMainScreen() {
         startActivity(Intent(this, MainActivity::class.java))
-    }
-
-    private fun persistAuthState(authState: AuthState) {
-        loginViewModel.persistAuthState(authState)
     }
 }

@@ -18,24 +18,26 @@ class SplashViewModel(app: Application, private val tokenHelper: OAuth2TokenHelp
     val tokenLiveData: LiveData<Event<TokenResult>>
         get() = _tokenLiveData
 
-    // TODO :: Check if user logged in
     fun validateToken() {
-        if (tokenHelper.hasToken) {
-            safeExecute({
+        safeExecute(
+            {
+                if (tokenHelper.hasToken) {
                 val tokenResult = async {
                     tokenHelper.validateToken()
                 }
                 val user = tokenResult.await()
                 Timber.i("Valid token for user = ${user.name}")
                 _tokenLiveData.postValue(Event(TokenResult.Valid))
+                } else {
+                    _tokenLiveData.postValue(Event(TokenResult.Empty))
+                }
                 delay(3000)
-            }, {
+            },
+            {
                 _tokenLiveData.postValue(Event(TokenResult.Invalid))
                 Timber.e(it)
-            })
-        } else {
-            _tokenLiveData.postValue(Event(TokenResult.Empty))
-        }
+            }
+        )
     }
 
     sealed class TokenResult {
