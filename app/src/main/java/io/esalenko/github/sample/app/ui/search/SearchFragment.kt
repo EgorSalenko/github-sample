@@ -37,6 +37,8 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     private lateinit var itemAdapter: GenericItemAdapter
     private lateinit var footerAdapter: GenericItemAdapter
 
+    private lateinit var endlessScrollListener: EndlessRecyclerOnScrollListener
+
     override fun onReady(savedInstanceState: Bundle?) {
         super.onReady(savedInstanceState)
         retainInstance = true
@@ -53,19 +55,20 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         itemAdapter = ItemAdapter.items()
         footerAdapter = ItemAdapter.items()
         fastAdapter = FastAdapter.with(listOf(itemAdapter, footerAdapter))
-        val endlessScrollListener = object : EndlessRecyclerOnScrollListener(footerAdapter) {
-            override fun onLoadMore(currentPage: Int) {
-                footerAdapter.clear()
-                val progressItem = ProgressItem()
-                progressItem.isEnabled = false
-                footerAdapter.add(progressItem)
-                searchViewModel.onLoadMore(nextPage = currentPage + 1)
-            }
-        }
+
         searchResultList.apply {
             adapter = fastAdapter
             layoutManager = LinearLayoutManager(context)
             itemAnimator = SlideLeftAlphaAnimator()
+            endlessScrollListener = object : EndlessRecyclerOnScrollListener(footerAdapter) {
+                override fun onLoadMore(currentPage: Int) {
+                    footerAdapter.clear()
+                    val progressItem = ProgressItem()
+                    progressItem.isEnabled = false
+                    footerAdapter.add(progressItem)
+                    searchViewModel.onLoadMore(nextPage = currentPage + 1)
+                }
+            }
             addOnScrollListener(endlessScrollListener)
         }
         fastAdapter.addEventHook(object : ClickEventHook<ItemSearch>() {
@@ -105,6 +108,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             hideSoftKeyboard()
             val query = searchInputEditText.text.toString()
             searchViewModel.search(query)
+            resetEndlessScrollPageCount()
         }
     }
 
@@ -121,10 +125,19 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 val itemsEntity: List<SearchItemEntity>? = liveDataResult.data
                 bindSearchItems(itemsEntity)
             }
-            is Error -> showErrorToast()
+            is Error -> {
+                showErrorToast()
+            }
             is Cache -> {
                 footerAdapter.clear()
+                resetEndlessScrollPageCount()
             }
+        }
+    }
+
+    private fun resetEndlessScrollPageCount() {
+        if (::endlessScrollListener.isInitialized) {
+            endlessScrollListener.resetPageCount()
         }
     }
 

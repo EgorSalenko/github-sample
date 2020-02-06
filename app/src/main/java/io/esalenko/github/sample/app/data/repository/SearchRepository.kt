@@ -4,16 +4,23 @@ import io.esalenko.github.sample.app.data.db.dao.SearchDao
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
 import io.esalenko.github.sample.app.data.model.search.Items
 import io.esalenko.github.sample.app.data.network.SearchService
+import io.esalenko.github.sample.app.data.persistence.SharedPreferenceManager
 
 
-class SearchRepository(private val service: SearchService, private val searchDao: SearchDao) {
+class SearchRepository(
+    private val service: SearchService,
+    private val searchDao: SearchDao,
+    private val sharedPreferenceManager: SharedPreferenceManager
+) {
 
     companion object {
         private const val PAGE_LIMIT = 30
     }
 
     suspend fun search(query: String, page: Int) {
+        val token = "token ${sharedPreferenceManager.readAuthState()?.accessToken}"
         val items = service.search(
+            token,
             query,
             sort = "stars",
             order = "desc",

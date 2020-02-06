@@ -5,5 +5,5 @@ import org.koin.dsl.module
 
 
 val searchModule = module {
-    single { SearchRepository(get(), get()) }
+    single { SearchRepository(get(), get(), get()) }
 }
