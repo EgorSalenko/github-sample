@@ -2,6 +2,7 @@ package io.esalenko.github.sample.app.di
 
 import com.google.gson.Gson
 import io.esalenko.github.sample.app.data.Constants.BASE_URL
+import io.esalenko.github.sample.app.data.network.AuthService
 import io.esalenko.github.sample.app.data.network.SearchService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -38,5 +39,13 @@ val networkModule = module {
             get(),
             baseUrl = BASE_URL
         ).create(SearchService::class.java)
+    }
+
+    single<AuthService> {
+        provideRetrofit(
+            get(),
+            get(),
+            baseUrl = BASE_URL
+        ).create(AuthService::class.java)
     }
 }

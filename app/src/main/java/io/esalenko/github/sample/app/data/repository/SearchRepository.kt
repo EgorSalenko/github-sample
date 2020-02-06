@@ -2,7 +2,7 @@ package io.esalenko.github.sample.app.data.repository
 
 import io.esalenko.github.sample.app.data.db.dao.SearchDao
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
-import io.esalenko.github.sample.app.data.model.Items
+import io.esalenko.github.sample.app.data.model.search.Items
 import io.esalenko.github.sample.app.data.network.SearchService
 
 

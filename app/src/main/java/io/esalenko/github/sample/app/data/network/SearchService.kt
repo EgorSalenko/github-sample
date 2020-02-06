@@ -1,6 +1,6 @@
 package io.esalenko.github.sample.app.data.network
 
-import io.esalenko.github.sample.app.data.model.SearchResponse
+import io.esalenko.github.sample.app.data.model.search.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

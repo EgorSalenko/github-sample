@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 val authModule = module {
     single { OAuth2AuthorizationHelper() }
-    single { OAuth2TokenHelper(get()) }
+    single { OAuth2TokenHelper(get(), get()) }
 }

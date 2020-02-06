@@ -1,4 +1,4 @@
-package io.esalenko.github.sample.app.data.model
+package io.esalenko.github.sample.app.data.model.search
 
 import com.google.gson.annotations.SerializedName
 

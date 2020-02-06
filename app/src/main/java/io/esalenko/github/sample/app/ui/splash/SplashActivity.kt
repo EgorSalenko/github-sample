@@ -26,7 +26,8 @@ class SplashActivity : BaseActivity(R.layout.activity_splash) {
             // https://developer.github.com/v3/apps/oauth_applications/
             when (event.getContentIfNotHandled()) {
                 is SplashViewModel.TokenResult.Valid -> openSearchScreen()
-                is SplashViewModel.TokenResult.Empty -> openLoginScreen()
+                is SplashViewModel.TokenResult.Empty, SplashViewModel.TokenResult
+                    .Invalid -> openLoginScreen()
             }
         })
     }
