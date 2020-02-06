@@ -1,6 +1,8 @@
 package io.esalenko.github.sample.app.ui.common
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 
@@ -21,4 +23,13 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes), Ba
     override fun onReady(savedInstanceState: Bundle?) {}
 
     override fun onInitView(savedInstanceState: Bundle?) {}
+
+    fun hideSoftKeyboard() {
+        val inputMethodManager = activity?.getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager?
+        inputMethodManager?.hideSoftInputFromWindow(
+            activity?.currentFocus?.windowToken, 0
+        )
+    }
 }

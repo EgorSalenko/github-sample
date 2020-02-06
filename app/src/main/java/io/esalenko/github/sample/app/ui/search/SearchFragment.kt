@@ -102,8 +102,8 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     private fun searchInput() {
-        // TODO :: hide keyboard
         searchBtn.setOnClickListener {
+            hideSoftKeyboard()
             val query = searchInputEditText.text.toString()
             searchViewModel.search(query)
         }
