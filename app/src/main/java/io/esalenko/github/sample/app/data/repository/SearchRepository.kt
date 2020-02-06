@@ -40,7 +40,7 @@ class SearchRepository(private val service: SearchService, private val searchDao
             this.id,
             this.full_name,
             this.description,
-            this.url,
+            this.html_url,
             this.stargazers_count,
             this.language
         )

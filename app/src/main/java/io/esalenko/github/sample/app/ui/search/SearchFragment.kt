@@ -79,7 +79,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             ) {
                 when (v.id) {
                     v.deleteItem.id -> searchViewModel.deleteItem(item.entity.id)
-                    v.item_card_view.id -> openItemInBrowser(item.entity.url)
+                    v.item_card_view.id -> openItemInBrowser(item.entity.html_url)
                 }
             }
 
@@ -94,7 +94,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     private fun openItemInBrowser(url: String) {
-        TODO("Implement")
+        launchBrowser(url)
     }
 
     private fun listeners() {

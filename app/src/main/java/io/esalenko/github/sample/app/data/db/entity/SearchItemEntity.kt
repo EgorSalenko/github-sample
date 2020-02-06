@@ -8,7 +8,7 @@ data class SearchItemEntity(
     @PrimaryKey val id: Int,
     val full_name: String,
     val description: String?,
-    val url: String,
+    val html_url: String,
     val stargazers_count: Int,
     val language: String?
 )

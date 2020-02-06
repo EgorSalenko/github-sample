@@ -10,7 +10,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     override fun onReady(savedInstanceState: Bundle?) {
         super.onReady(savedInstanceState)
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().addToBackStack(null)
+            supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, SearchFragment.newInstance(), SearchFragment.TAG)
                 .commitAllowingStateLoss()
         }
