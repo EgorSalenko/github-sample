@@ -17,9 +17,6 @@ class OAuth2TokenHelper(
         sharedPreferenceManager.writeAuthState(authState)
     }
 
-    suspend fun validateToken(): User {
-        val token = sharedPreferenceManager.readAuthState()?.accessToken
-            ?: throw IllegalStateException("Stored access token is empty")
-        return authService.validateToken("token $token")
-    }
+    suspend fun validateToken(): User = authService.getUser()
+
 }

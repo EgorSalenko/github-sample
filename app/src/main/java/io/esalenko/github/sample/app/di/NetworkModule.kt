@@ -3,6 +3,7 @@ package io.esalenko.github.sample.app.di
 import com.google.gson.Gson
 import io.esalenko.github.sample.app.data.Constants.BASE_URL
 import io.esalenko.github.sample.app.data.network.AuthService
+import io.esalenko.github.sample.app.data.network.HttpHeaderInterceptor
 import io.esalenko.github.sample.app.data.network.SearchService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,9 +17,13 @@ val networkModule = module {
     fun provideHttpLoggingInterceptor() =
         HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
-    fun provideHttpClient(loggingInterceptor: HttpLoggingInterceptor) = OkHttpClient
+    fun provideHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: HttpHeaderInterceptor
+    ) = OkHttpClient
         .Builder()
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(headerInterceptor)
         .build()
 
     fun provideGson() = Gson()
@@ -29,8 +34,9 @@ val networkModule = module {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    single { HttpHeaderInterceptor(get()) }
     single { provideHttpLoggingInterceptor() }
-    single { provideHttpClient(get()) }
+    single { provideHttpClient(get(), get()) }
     single { provideGson() }
 
     single<SearchService> {
