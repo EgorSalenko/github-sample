@@ -16,12 +16,6 @@ class GithubApplication : Application() {
         setupTimber()
     }
 
-    private fun setupTimber() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
-    }
-
     private fun injectKoin() {
         startKoin {
             androidLogger(level = Level.INFO)
@@ -35,6 +29,12 @@ class GithubApplication : Application() {
                     searchModule
                 )
             )
+        }
+    }
+
+    private fun setupTimber() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

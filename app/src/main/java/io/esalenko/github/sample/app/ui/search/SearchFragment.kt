@@ -72,7 +72,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             addOnScrollListener(endlessScrollListener)
         }
         fastAdapter.addEventHook(object : ClickEventHook<ItemSearch>() {
-
             override fun onClick(
                 v: View,
                 position: Int,

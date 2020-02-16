@@ -49,9 +49,7 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
     }
 
     private fun onClickListeners() {
-        signInButton.setOnClickListener {
-            signIn()
-        }
+        signInButton.setOnClickListener { signIn() }
     }
 
     private fun signIn() {
@@ -85,7 +83,6 @@ class LoginActivity : BaseActivity(R.layout.activity_login) {
     }
 
     private fun handleAuthorizationResponse(intent: Intent) {
-
         val response = AuthorizationResponse.fromIntent(intent) ?: return
         val error = AuthorizationException.fromIntent(intent)
         authHelper.handleAuthorizationResponse(response, error) { authState ->

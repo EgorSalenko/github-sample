@@ -8,25 +8,25 @@ import timber.log.Timber
 
 abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val searchJob = Job()
-    private val searchScope = CoroutineScope(Dispatchers.IO + searchJob)
+    private val commonViewModelJob = Job()
+    private val viewModelScope = CoroutineScope(Dispatchers.IO + commonViewModelJob)
 
-    fun safeExecute(
+    fun executeOnBackground(
         body: suspend CoroutineScope.() -> Unit,
         error: (suspend (Exception) -> Unit)? = null
     ) {
-        searchScope.launch {
+        viewModelScope.launch {
             try {
-                body.invoke(searchScope)
+                body.invoke(viewModelScope)
             } catch (e: Exception) {
-                error?.invoke(e)
                 Timber.e(e)
+                error?.invoke(e)
             }
         }
     }
 
     override fun onCleared() {
         super.onCleared()
-        searchScope.coroutineContext.cancelChildren()
+        viewModelScope.coroutineContext.cancelChildren()
     }
 }

@@ -32,21 +32,27 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
             _searchLiveData.postValue(LiveDataResult.Loading())
             lastQuery = query
             clearCache()
-            getSearchedList(FIRST_PAGE, { searchItems ->
-                _searchLiveData.postValue(LiveDataResult.Success(searchItems))
-            }, {
-                _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
-            })
+            getSearchedList(FIRST_PAGE,
+                { searchItems ->
+                    _searchLiveData.postValue(LiveDataResult.Success(searchItems))
+                },
+                {
+                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                }
+            )
         }
     }
 
     fun onLoadMore(nextPage: Int) {
         if (lastQuery.isNotEmpty()) {
-            getSearchedList(nextPage, { searchItems ->
-                _searchLiveData.postValue(LiveDataResult.Success(searchItems))
-            }, {
-                _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
-            })
+            getSearchedList(nextPage,
+                { searchItems ->
+                    _searchLiveData.postValue(LiveDataResult.Success(searchItems))
+                },
+                {
+                    _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))
+                }
+            )
         } else {
             _searchLiveData.postValue(LiveDataResult.Cache())
         }
@@ -54,13 +60,11 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
 
     fun deleteItem(id: Int) {
         delete(id)
-        fetchCachedData()
+        fetchCachedData() // get changed data
     }
 
     private fun delete(id: Int) {
-        safeExecute({
-            repository.delete(id)
-        })
+        executeOnBackground({ repository.delete(id) })
     }
 
     private fun getSearchedList(
@@ -68,12 +72,10 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
         onExecute: suspend (List<SearchItemEntity>) -> Unit,
         onError: suspend (Exception) -> Unit
     ) {
-        safeExecute(
+        executeOnBackground(
             {
                 repository.search(lastQuery, page)
-                val searchItems = async {
-                    repository.getAll()
-                }
+                val searchItems = async { repository.getAll() }
                 onExecute.invoke(searchItems.await())
             },
             { error ->
@@ -83,14 +85,12 @@ class SearchViewModel(app: Application, private val repository: SearchRepository
     }
 
     private fun clearCache() {
-        safeExecute({ repository.clearAll() })
+        executeOnBackground({ repository.clearAll() })
     }
 
     private fun fetchCachedData() {
-        safeExecute({
-            val searchItems = async {
-                repository.getAll()
-            }
+        executeOnBackground({
+            val searchItems = async { repository.getAll() }
             _searchLiveData.postValue(LiveDataResult.Success(searchItems.await()))
         }, {
             _searchLiveData.postValue(LiveDataResult.Error("Error occurred while fetching data"))

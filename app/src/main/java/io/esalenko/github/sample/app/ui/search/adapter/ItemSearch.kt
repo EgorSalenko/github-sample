@@ -17,11 +17,10 @@ import org.jetbrains.anko.find
 class ItemSearch(val entity: SearchItemEntity) :
     AbstractItem<ItemSearch.SearchItemViewHolder>() {
 
-    override fun createView(ctx: Context, parent: ViewGroup?): View {
-        return ItemSearchUi
+    override fun createView(ctx: Context, parent: ViewGroup?): View =
+        ItemSearchUi
             .newInstance()
             .createView(AnkoContext.createReusable(ctx, this))
-    }
 
     override val layoutRes: Int
         get() = 0
@@ -37,11 +36,11 @@ class ItemSearch(val entity: SearchItemEntity) :
     class SearchItemViewHolder(view: View) : FastAdapter.ViewHolder<ItemSearch>(view) {
 
         var card = view.find<CardView>(R.id.item_card)
+        var deleteIcon = view.find<ImageView>(R.id.item_delete_icon)
         private var fullNameTextView = view.find<MaterialTextView>(R.id.item_full_name)
         private var descriptionTextView = view.find<MaterialTextView>(R.id.item_description)
         private var starsTextView = view.find<MaterialTextView>(R.id.item_stars)
         private var languageTextView = view.find<MaterialTextView>(R.id.item_language)
-        var deleteIcon = view.find<ImageView>(R.id.item_delete_icon)
 
         override fun bindView(item: ItemSearch, payloads: MutableList<Any>) {
             with(item.entity) {

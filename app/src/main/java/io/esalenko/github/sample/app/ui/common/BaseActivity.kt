@@ -10,21 +10,14 @@ abstract class BaseActivity(@LayoutRes layoutResId: Int) :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         onPrepare(savedInstanceState)
         onInitView(savedInstanceState)
         onReady(savedInstanceState)
     }
 
-    override fun onPrepare(savedInstanceState: Bundle?) {
+    override fun onPrepare(savedInstanceState: Bundle?) {}
 
-    }
+    override fun onReady(savedInstanceState: Bundle?) {}
 
-    override fun onReady(savedInstanceState: Bundle?) {
-
-    }
-
-    override fun onInitView(savedInstanceState: Bundle?) {
-
-    }
+    override fun onInitView(savedInstanceState: Bundle?) {}
 }
