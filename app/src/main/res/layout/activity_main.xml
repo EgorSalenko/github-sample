@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
+            app:contentInsetEndWithActions="0dp"
             android:theme="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
             app:contentInsetEnd="0dp"
             app:popupTheme="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary">
@@ -29,16 +31,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@string/app_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:text="@string/app_name"
                     android:textColor="@color/colorAccent" />
 
                 <ImageView
                     android:id="@+id/user_avatar"
                     android:layout_width="15dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="@dimen/margin_small_xx"
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_small_xx"
+                    android:scaleType="fitEnd"
+                    tools:src="@tools:sample/backgrounds/scenic"
                     android:contentDescription="@string/content_description_user_avatar" />
 
             </LinearLayout>
