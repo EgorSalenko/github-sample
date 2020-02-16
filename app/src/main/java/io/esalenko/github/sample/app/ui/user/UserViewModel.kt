@@ -17,6 +17,10 @@ class UserViewModel(app: Application, private val repository: UserRepository) : 
         get() = _userLiveData
     private val _userLiveData = MutableLiveData<LiveDataResult<User>>()
 
+    val profileLiveData: LiveData<String>
+        get() = _profileLiveData
+    private val _profileLiveData = MutableLiveData<String>()
+
     init {
         getUserInfo()
     }
@@ -25,8 +29,10 @@ class UserViewModel(app: Application, private val repository: UserRepository) : 
         _userLiveData.postValue(LiveDataResult.Loading())
         executeOnBackground(
             {
-                val user = async { repository.getUserData() }
-                _userLiveData.postValue(LiveDataResult.Success(user.await()))
+                val deferredUser = async { repository.getUserData() }
+                val user = deferredUser.await()
+                _userLiveData.postValue(LiveDataResult.Success(user))
+                _profileLiveData.postValue(user.avatar_url)
             },
             { error ->
                 Timber.e(error)

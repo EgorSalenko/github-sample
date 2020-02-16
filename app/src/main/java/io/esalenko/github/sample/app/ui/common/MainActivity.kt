@@ -1,14 +1,14 @@
 package io.esalenko.github.sample.app.ui.common
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import io.esalenko.github.sample.app.R
+import io.esalenko.github.sample.app.helper.setCircleImage
 import io.esalenko.github.sample.app.ui.search.SearchFragment
+import io.esalenko.github.sample.app.ui.user.ProfileActivity
 import io.esalenko.github.sample.app.ui.user.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.startActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -20,10 +20,29 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
         super.onReady(savedInstanceState)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, SearchFragment.newInstance(), SearchFragment.TAG)
+                .add(
+                    R.id.fragment_container,
+                    SearchFragment.newInstance(),
+                    SearchFragment.TAG
+                )
                 .commitAllowingStateLoss()
         }
         setSupportActionBar(main_toolbar)
+        listeners()
+    }
+
+    private fun listeners() {
+        onUserIconClickListener()
+    }
+
+    private fun onUserIconClickListener() {
+        user_avatar.setOnClickListener {
+            openUserProfile()
+        }
+    }
+
+    private fun openUserProfile() {
+        startActivity<ProfileActivity>()
     }
 
     override fun onInitView(savedInstanceState: Bundle?) {
@@ -32,30 +51,10 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     }
 
     private fun subscribeUi() {
-        userViewModel.userLiveData.observe(this, Observer { result ->
-            when (result) {
-                is LiveDataResult.Success -> {
-                    val userData = result.data ?: return@Observer
-                    setUserAvatar(userData.avatar_url)
-                }
-                is LiveDataResult.Error -> {
-                    Toast.makeText(this, result.msg, Toast.LENGTH_SHORT).show()
-                }
-                is LiveDataResult.Loading -> {
-
-                }
-                is LiveDataResult.Cache -> {
-
-                }
-            }
+        userViewModel
+            .profileLiveData
+            .observe(this, Observer { url ->
+                user_avatar.setCircleImage(url)
         })
-    }
-
-    private fun setUserAvatar(url: String) {
-        Glide
-            .with(this)
-            .load(url)
-            .apply(RequestOptions.circleCropTransform())
-            .into(user_avatar)
     }
 }

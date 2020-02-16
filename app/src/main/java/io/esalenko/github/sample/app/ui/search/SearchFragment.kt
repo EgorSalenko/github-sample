@@ -15,6 +15,7 @@ import com.mikepenz.fastadapter.scroll.EndlessRecyclerOnScrollListener
 import com.mikepenz.itemanimators.SlideLeftAlphaAnimator
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.db.entity.SearchItemEntity
+import io.esalenko.github.sample.app.helper.launchBrowser
 import io.esalenko.github.sample.app.ui.common.BaseFragment
 import io.esalenko.github.sample.app.ui.common.LiveDataResult
 import io.esalenko.github.sample.app.ui.common.LiveDataResult.*
@@ -95,7 +96,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
     }
 
     private fun openItemInBrowser(url: String) {
-        launchBrowser(url)
+        requireContext().launchBrowser(url)
     }
 
     private fun listeners() {
