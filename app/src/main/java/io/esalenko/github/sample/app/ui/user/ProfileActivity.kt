@@ -8,6 +8,7 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.GenericItem
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.diff.FastAdapterDiffUtil
+import com.mikepenz.itemanimators.AlphaCrossFadeAnimator
 import io.esalenko.github.sample.app.R
 import io.esalenko.github.sample.app.data.model.repos.UserRepo
 import io.esalenko.github.sample.app.data.model.user.User
@@ -49,6 +50,7 @@ class ProfileActivity : BaseActivity(R.layout.activity_profile) {
         user_repos.apply {
             layoutManager = LinearLayoutManager(this@ProfileActivity)
             adapter = fastAdapter
+            itemAnimator = AlphaCrossFadeAnimator()
         }
     }
 

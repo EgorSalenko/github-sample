@@ -76,12 +76,15 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                             id = R.id.item_stars
                             textAppearance = R.style.TextAppearance_MaterialComponents_Overline
                             gravity = Gravity.CENTER
+                            textSize = 14f
                             setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 R.drawable.ic_star_24px,
                                 0,
                                 0,
                                 0
                             )
+                            compoundDrawablePadding =
+                                resources.getDimension(R.dimen.margin_small).toInt()
                         }.lparams(wrapContent, wrapContent) {
                             horizontalBias = 0.0f
                             setMargins(0, dip(12), 0, 0)
