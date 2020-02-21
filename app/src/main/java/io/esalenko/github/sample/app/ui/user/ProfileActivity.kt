@@ -20,7 +20,7 @@ import io.esalenko.github.sample.app.ui.user.adapter.UserReposItem
 import kotlinx.android.synthetic.main.activity_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-
+// TODO :: Add SwipeToRefresh view (refresh user repo data)
 class ProfileActivity : BaseActivity(R.layout.activity_profile) {
 
     private val userViewModel by viewModel<UserViewModel>()
