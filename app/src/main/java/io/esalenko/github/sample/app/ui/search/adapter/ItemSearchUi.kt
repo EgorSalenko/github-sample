@@ -37,7 +37,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
 
                         val itemName = materialTextView {
                             id = R.id.item_full_name
-                            textAppearance = R.style.TextAppearance_AppCompat_Title
+                            textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
                             maxLines = 1
                             setTypeface(typeface, Typeface.BOLD)
                             ellipsize = TextUtils.TruncateAt.END
@@ -50,7 +50,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
 
                         val itemDescription = materialTextView {
                             id = R.id.item_description
-                            textAppearance = R.style.TextAppearance_AppCompat_Body2
+                            textAppearance = R.style.TextAppearance_MaterialComponents_Body2
                             ellipsize = TextUtils.TruncateAt.END
                             setTypeface(typeface, Typeface.ITALIC)
                             maxLines = 2
@@ -63,7 +63,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
 
                         val itemLang = materialTextView {
                             id = R.id.item_language
-                            textAppearance = R.style.TextAppearance_AppCompat_Body2
+                            textAppearance = R.style.TextAppearance_MaterialComponents_Overline
                             setTypeface(typeface, Typeface.ITALIC)
                         }.lparams(wrapContent, wrapContent) {
                             setMargins(0, dip(12), 0, 0)
@@ -74,7 +74,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
 
                         val itemStars = materialTextView {
                             id = R.id.item_stars
-                            textAppearance = R.style.TextAppearance_AppCompat_Body2
+                            textAppearance = R.style.TextAppearance_MaterialComponents_Overline
                             gravity = Gravity.CENTER
                             setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 R.drawable.ic_star_24px,

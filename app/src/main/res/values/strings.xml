@@ -15,4 +15,5 @@
   <string name="search">Search</string>
   <string name="content_description_user_avatar">User Avatar</string>
     <string name="no_description_available">No description available</string>
+    <string name="repositories_label">Repositories:</string>
 </resources>
