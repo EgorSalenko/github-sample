@@ -1,5 +1,6 @@
 package io.esalenko.github.sample.app.ui.search.adapter
 
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
@@ -38,6 +39,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                             id = R.id.item_full_name
                             textAppearance = R.style.TextAppearance_AppCompat_Title
                             maxLines = 1
+                            setTypeface(typeface, Typeface.BOLD)
                             ellipsize = TextUtils.TruncateAt.END
                         }.lparams(0, wrapContent) {
                             margin = dip(4)
@@ -50,6 +52,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                             id = R.id.item_description
                             textAppearance = R.style.TextAppearance_AppCompat_Body2
                             ellipsize = TextUtils.TruncateAt.END
+                            setTypeface(typeface, Typeface.ITALIC)
                             maxLines = 2
                         }.lparams(0, wrapContent) {
                             setMargins(dip(4), dip(12), dip(4), 0)
@@ -61,6 +64,7 @@ class ItemSearchUi : AnkoComponent<ItemSearch> {
                         val itemLang = materialTextView {
                             id = R.id.item_language
                             textAppearance = R.style.TextAppearance_AppCompat_Body2
+                            setTypeface(typeface, Typeface.ITALIC)
                         }.lparams(wrapContent, wrapContent) {
                             setMargins(0, dip(12), 0, 0)
                             matchConstraintDefaultWidth = MATCH_CONSTRAINT_WRAP
