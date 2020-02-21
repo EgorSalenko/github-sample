@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="fastadapter_search_item" type="id" />
+    <item name="fastadapter_user_repos_item" type="id" />
     <item name="fastadapter_footer_item" type="id" />
 
     <!--ItemSearchUi-->

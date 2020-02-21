@@ -5,9 +5,9 @@
     android:id="@+id/item_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_small_xxx"
+    android:layout_margin="@dimen/margin_small_xx"
     app:cardCornerRadius="@dimen/margin_small"
-    app:cardElevation="@dimen/margin_extra_small">
+    app:cardElevation="@dimen/margin_small">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,13 +16,13 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/itemFullName"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/itemDescription"
-            app:layout_constraintEnd_toStartOf="@id/deleteItem"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="title" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -30,11 +30,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@id/itemFullName"
             android:ellipsize="marquee"
             android:focusable="true"
+            app:layout_constraintEnd_toEndOf="parent"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
@@ -47,12 +48,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:textStyle="italic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/itemDescription"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             tools:text="Kotlin" />
 
 
@@ -60,29 +62,18 @@
             android:id="@+id/itemStars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_medium"
-            android:layout_marginBottom="@dimen/margin_medium"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/itemLang"
-            app:layout_constraintTop_toBottomOf="@id/itemDescription"
-            android:drawableStart="@drawable/ic_star_24px"
-            android:drawablePadding="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            tools:text="2" />
-
-        <ImageView
-            android:id="@+id/deleteItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
             android:layout_marginEnd="@dimen/margin_small"
-            android:padding="@dimen/margin_small_xx"
-            android:src="@drawable/ic_round_clear_24px"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:drawableStart="@drawable/ic_star_24px"
+            android:gravity="center"
+            android:drawablePadding="@dimen/margin_small"
+            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/itemDescription"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@id/itemDescription"
+            tools:text="2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

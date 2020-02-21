@@ -14,4 +14,5 @@
   <string name="powered_by_egor_salenko">Powered by Egor Salenko</string>
   <string name="search">Search</string>
   <string name="content_description_user_avatar">User Avatar</string>
+    <string name="no_description_available">No description available</string>
 </resources>

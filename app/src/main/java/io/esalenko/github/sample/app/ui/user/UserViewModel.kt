@@ -3,6 +3,7 @@ package io.esalenko.github.sample.app.ui.user
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.esalenko.github.sample.app.data.model.repos.UserRepo
 import io.esalenko.github.sample.app.data.model.user.User
 import io.esalenko.github.sample.app.data.repository.UserRepository
 import io.esalenko.github.sample.app.ui.common.BaseViewModel
@@ -17,12 +18,17 @@ class UserViewModel(app: Application, private val repository: UserRepository) : 
         get() = _userLiveData
     private val _userLiveData = MutableLiveData<LiveDataResult<User>>()
 
+    val userRepoLiveData: LiveData<LiveDataResult<List<UserRepo>>>
+        get() = _userReposLiveData
+    private val _userReposLiveData = MutableLiveData<LiveDataResult<List<UserRepo>>>()
+
     val profileLiveData: LiveData<String>
         get() = _profileLiveData
     private val _profileLiveData = MutableLiveData<String>()
 
     init {
         getUserInfo()
+        getUserRepos()
     }
 
     private fun getUserInfo() {
@@ -37,6 +43,22 @@ class UserViewModel(app: Application, private val repository: UserRepository) : 
             { error ->
                 Timber.e(error)
                 _userLiveData.postValue(LiveDataResult.Error("Unable to fetch user data"))
+            }
+        )
+    }
+
+    private fun getUserRepos() {
+        _userReposLiveData.postValue(LiveDataResult.Loading())
+        executeOnBackground(
+            {
+                val deferredUserRepos = async { repository.getUserRepos() }
+                val repos = deferredUserRepos.await().toList()
+                Timber.i(repos.toString())
+                _userReposLiveData.postValue(LiveDataResult.Success(repos))
+            },
+            { error ->
+                Timber.e(error)
+                _userReposLiveData.postValue(LiveDataResult.Error("Unable to fetch user repositories"))
             }
         )
     }

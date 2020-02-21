@@ -10,10 +10,10 @@
         android:id="@+id/toolbar_profile"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:titleTextColor="@color/colorAccent" />
 
     <ImageView
@@ -21,9 +21,9 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_margin="@dimen/margin_large_xx"
-        android:contentDescription="@string/content_description_user_avatar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_profile"
+        android:contentDescription="@string/content_description_user_avatar"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -31,11 +31,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_medium"
-        android:gravity="start"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/user_avatar"
         app:layout_constraintTop_toTopOf="@id/user_avatar"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
         tools:text="User Name" />
 
     <TextView
@@ -43,9 +43,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="@id/user_name"
         app:layout_constraintTop_toBottomOf="@id/user_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="UserLogin" />
 
     <TextView
@@ -53,10 +53,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small_xx"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@id/user_name"
         app:layout_constraintTop_toBottomOf="@id/user_login"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textStyle="italic"
         tools:text="User bio" />
 
     <TextView
@@ -64,13 +64,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
-        android:drawableStart="@drawable/ic_place_24px"
-        android:drawablePadding="@dimen/margin_small"
         android:gravity="center|start"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/user_avatar"
         app:layout_constraintTop_toBottomOf="@id/user_avatar"
+        android:drawableStart="@drawable/ic_place_24px"
+        android:drawablePadding="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold"
         tools:text="City, Country" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_repos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_large_xx"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginEnd="@dimen/margin_large_xx"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_location"
+        tools:listitem="@layout/item_github_repository" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
